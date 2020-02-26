@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxb.prjms.dao.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.zxb.prjms.bean.Project">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="projectname" jdbcType="VARCHAR" property="projectname" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="finishtime" jdbcType="TIMESTAMP" property="finishtime" />
+    <result column="process" jdbcType="INTEGER" property="process" />
+    <result column="headerid" jdbcType="VARCHAR" property="headerid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="creatorid" jdbcType="VARCHAR" property="creatorid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zxb.prjms.bean.Project">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, projectname, createtime, finishtime, process, headerid, status, creatorid
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.zxb.prjms.bean.ProjectExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pm_project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.zxb.prjms.bean.ProjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pm_project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pm_project
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pm_project
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zxb.prjms.bean.ProjectExample">
+    delete from pm_project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zxb.prjms.bean.Project">
+    insert into pm_project (id, projectname, createtime, 
+      finishtime, process, headerid, 
+      status, creatorid, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectname,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{finishtime,jdbcType=TIMESTAMP}, #{process,jdbcType=INTEGER}, #{headerid,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{creatorid,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zxb.prjms.bean.Project">
+    insert into pm_project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectname != null">
+        projectname,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="finishtime != null">
+        finishtime,
+      </if>
+      <if test="process != null">
+        process,
+      </if>
+      <if test="headerid != null">
+        headerid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creatorid != null">
+        creatorid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectname != null">
+        #{projectname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishtime != null">
+        #{finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="process != null">
+        #{process,jdbcType=INTEGER},
+      </if>
+      <if test="headerid != null">
+        #{headerid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorid != null">
+        #{creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zxb.prjms.bean.ProjectExample" resultType="java.lang.Long">
+    select count(*) from pm_project
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update pm_project
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectname != null">
+        projectname = #{record.projectname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.finishtime != null">
+        finishtime = #{record.finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.process != null">
+        process = #{record.process,jdbcType=INTEGER},
+      </if>
+      <if test="record.headerid != null">
+        headerid = #{record.headerid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorid != null">
+        creatorid = #{record.creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update pm_project
+    set id = #{record.id,jdbcType=INTEGER},
+      projectname = #{record.projectname,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      finishtime = #{record.finishtime,jdbcType=TIMESTAMP},
+      process = #{record.process,jdbcType=INTEGER},
+      headerid = #{record.headerid,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      creatorid = #{record.creatorid,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update pm_project
+    set id = #{record.id,jdbcType=INTEGER},
+      projectname = #{record.projectname,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      finishtime = #{record.finishtime,jdbcType=TIMESTAMP},
+      process = #{record.process,jdbcType=INTEGER},
+      headerid = #{record.headerid,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      creatorid = #{record.creatorid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxb.prjms.bean.Project">
+    update pm_project
+    <set>
+      <if test="projectname != null">
+        projectname = #{projectname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishtime != null">
+        finishtime = #{finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="process != null">
+        process = #{process,jdbcType=INTEGER},
+      </if>
+      <if test="headerid != null">
+        headerid = #{headerid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorid != null">
+        creatorid = #{creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zxb.prjms.bean.Project">
+    update pm_project
+    set projectname = #{projectname,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      finishtime = #{finishtime,jdbcType=TIMESTAMP},
+      process = #{process,jdbcType=INTEGER},
+      headerid = #{headerid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      creatorid = #{creatorid,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zxb.prjms.bean.Project">
+    update pm_project
+    set projectname = #{projectname,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      finishtime = #{finishtime,jdbcType=TIMESTAMP},
+      process = #{process,jdbcType=INTEGER},
+      headerid = #{headerid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      creatorid = #{creatorid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

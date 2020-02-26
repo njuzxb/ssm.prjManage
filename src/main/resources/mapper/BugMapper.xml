@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxb.prjms.dao.BugMapper">
+  <resultMap id="BaseResultMap" type="com.zxb.prjms.bean.Bug">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="projectid" jdbcType="INTEGER" property="projectid" />
+    <result column="moduleid" jdbcType="INTEGER" property="moduleid" />
+    <result column="bugtype" jdbcType="VARCHAR" property="bugtype" />
+    <result column="bughead" jdbcType="VARCHAR" property="bughead" />
+    <result column="creatorid" jdbcType="VARCHAR" property="creatorid" />
+    <result column="assignid" jdbcType="VARCHAR" property="assignid" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="finishtime" jdbcType="TIMESTAMP" property="finishtime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap id="WithPrjResultMap" type="com.zxb.prjms.bean.Bug">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="projectid" jdbcType="INTEGER" property="projectid" />
+    <result column="moduleid" jdbcType="INTEGER" property="moduleid" />
+    <result column="bugtype" jdbcType="VARCHAR" property="bugtype" />
+    <result column="bughead" jdbcType="VARCHAR" property="bughead" />
+    <result column="creatorid" jdbcType="VARCHAR" property="creatorid" />
+    <result column="assignid" jdbcType="VARCHAR" property="assignid" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="finishtime" jdbcType="TIMESTAMP" property="finishtime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <!-- 指定联合查询出的项目字段的封装 -->
+   <association property="project" javaType="com.zxb.prjms.bean.Project">
+   	<id column="projectname" property="projectname"/>
+   	<id column="prjcreatorid" property="creatorid"/>
+   </association>
+   <!-- 指定联合查询出的父模块字段的封装 -->
+   <association property="module" javaType="com.zxb.prjms.bean.Module">
+   	<id column="moduleName" property="modulename"/>
+   </association>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zxb.prjms.bean.Bug">
+    <result column="bugcontent" jdbcType="LONGVARCHAR" property="bugcontent" />
+  </resultMap>
+    <resultMap extends="WithPrjResultMap" id="ResultMapWithBLOBsAndPrj" type="com.zxb.prjms.bean.Bug">
+    <result column="bugcontent" jdbcType="LONGVARCHAR" property="bugcontent" />
+  </resultMap>
+  <sql id="Example_Where_Clause_b">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and b.${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and b.${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and b.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and b.${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, projectid, moduleid, bugtype, bughead, creatorid, assignid, priority, createtime, 
+    finishtime, status
+  </sql>
+   <sql id="WithPrj_Column_List">
+    b.id, b.projectid, b.moduleid, b.bugtype, b.bughead, b.creatorid, b.assignid, b.priority, b.createtime, 
+    b.finishtime, b.status,m.moduleName,p.projectname,p.creatorid prjcreatorid
+  </sql>
+  <sql id="Blob_Column_List">
+    bugcontent
+  </sql>
+   <sql id="Prj_Blob_Column_List">
+    b.bugcontent
+  </sql>
+  <!--查询带项目、模块  -->
+  <select id="selectByExampleWithBLOBsAndPrj" parameterType="com.zxb.prjms.bean.BugExample" resultMap="ResultMapWithBLOBsAndPrj">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithPrj_Column_List" />
+    ,
+    <include refid="Prj_Blob_Column_List" />
+    from (pm_bug b left join pm_module m on b.moduleid=m.id) left join pm_project p on b.projectid=p.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause_b" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleWithPrj" parameterType="com.zxb.prjms.bean.BugExample" resultMap="WithPrjResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithPrj_Column_List" />
+    from (pm_bug b left join pm_module m on b.moduleid=m.id) left join pm_project p on b.projectid=p.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause_b" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKeyWithPrj" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBsAndPrj">
+    select 
+    <include refid="WithPrj_Column_List" />
+    ,
+    <include refid="Prj_Blob_Column_List" />
+    from (pm_bug b left join pm_module m on b.moduleid=m.id) left join pm_project p on b.projectid=p.id
+    where b.id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询不带项目、模块 -->
+  <select id="selectByExampleWithBLOBs" parameterType="com.zxb.prjms.bean.BugExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pm_bug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.zxb.prjms.bean.BugExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pm_bug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pm_bug
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pm_bug
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zxb.prjms.bean.BugExample">
+    delete from pm_bug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zxb.prjms.bean.Bug">
+    insert into pm_bug (id, projectid, moduleid, 
+      bugtype, bughead, creatorid, 
+      assignid, priority, createtime, 
+      finishtime, status, bugcontent
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectid,jdbcType=INTEGER}, #{moduleid,jdbcType=INTEGER}, 
+      #{bugtype,jdbcType=VARCHAR}, #{bughead,jdbcType=VARCHAR}, #{creatorid,jdbcType=VARCHAR}, 
+      #{assignid,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{finishtime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{bugcontent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zxb.prjms.bean.Bug">
+    insert into pm_bug
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectid != null">
+        projectid,
+      </if>
+      <if test="moduleid != null">
+        moduleid,
+      </if>
+      <if test="bugtype != null">
+        bugtype,
+      </if>
+      <if test="bughead != null">
+        bughead,
+      </if>
+      <if test="creatorid != null">
+        creatorid,
+      </if>
+      <if test="assignid != null">
+        assignid,
+      </if>
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="finishtime != null">
+        finishtime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="bugcontent != null">
+        bugcontent,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null">
+        #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="moduleid != null">
+        #{moduleid,jdbcType=INTEGER},
+      </if>
+      <if test="bugtype != null">
+        #{bugtype,jdbcType=VARCHAR},
+      </if>
+      <if test="bughead != null">
+        #{bughead,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorid != null">
+        #{creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="assignid != null">
+        #{assignid,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishtime != null">
+        #{finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="bugcontent != null">
+        #{bugcontent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zxb.prjms.bean.BugExample" resultType="java.lang.Long">
+    select count(*) from pm_bug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update pm_bug
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectid != null">
+        projectid = #{record.projectid,jdbcType=INTEGER},
+      </if>
+      <if test="record.moduleid != null">
+        moduleid = #{record.moduleid,jdbcType=INTEGER},
+      </if>
+      <if test="record.bugtype != null">
+        bugtype = #{record.bugtype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bughead != null">
+        bughead = #{record.bughead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorid != null">
+        creatorid = #{record.creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assignid != null">
+        assignid = #{record.assignid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priority != null">
+        priority = #{record.priority,jdbcType=INTEGER},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.finishtime != null">
+        finishtime = #{record.finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bugcontent != null">
+        bugcontent = #{record.bugcontent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update pm_bug
+    set id = #{record.id,jdbcType=INTEGER},
+      projectid = #{record.projectid,jdbcType=INTEGER},
+      moduleid = #{record.moduleid,jdbcType=INTEGER},
+      bugtype = #{record.bugtype,jdbcType=VARCHAR},
+      bughead = #{record.bughead,jdbcType=VARCHAR},
+      creatorid = #{record.creatorid,jdbcType=VARCHAR},
+      assignid = #{record.assignid,jdbcType=VARCHAR},
+      priority = #{record.priority,jdbcType=INTEGER},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      finishtime = #{record.finishtime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      bugcontent = #{record.bugcontent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update pm_bug
+    set id = #{record.id,jdbcType=INTEGER},
+      projectid = #{record.projectid,jdbcType=INTEGER},
+      moduleid = #{record.moduleid,jdbcType=INTEGER},
+      bugtype = #{record.bugtype,jdbcType=VARCHAR},
+      bughead = #{record.bughead,jdbcType=VARCHAR},
+      creatorid = #{record.creatorid,jdbcType=VARCHAR},
+      assignid = #{record.assignid,jdbcType=VARCHAR},
+      priority = #{record.priority,jdbcType=INTEGER},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      finishtime = #{record.finishtime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxb.prjms.bean.Bug">
+    update pm_bug
+    <set>
+      <if test="projectid != null">
+        projectid = #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="moduleid != null">
+        moduleid = #{moduleid,jdbcType=INTEGER},
+      </if>
+      <if test="bugtype != null">
+        bugtype = #{bugtype,jdbcType=VARCHAR},
+      </if>
+      <if test="bughead != null">
+        bughead = #{bughead,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorid != null">
+        creatorid = #{creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="assignid != null">
+        assignid = #{assignid,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null">
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishtime != null">
+        finishtime = #{finishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="bugcontent != null">
+        bugcontent = #{bugcontent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zxb.prjms.bean.Bug">
+    update pm_bug
+    set projectid = #{projectid,jdbcType=INTEGER},
+      moduleid = #{moduleid,jdbcType=INTEGER},
+      bugtype = #{bugtype,jdbcType=VARCHAR},
+      bughead = #{bughead,jdbcType=VARCHAR},
+      creatorid = #{creatorid,jdbcType=VARCHAR},
+      assignid = #{assignid,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      finishtime = #{finishtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      bugcontent = #{bugcontent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zxb.prjms.bean.Bug">
+    update pm_bug
+    set projectid = #{projectid,jdbcType=INTEGER},
+      moduleid = #{moduleid,jdbcType=INTEGER},
+      bugtype = #{bugtype,jdbcType=VARCHAR},
+      bughead = #{bughead,jdbcType=VARCHAR},
+      creatorid = #{creatorid,jdbcType=VARCHAR},
+      assignid = #{assignid,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      finishtime = #{finishtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
