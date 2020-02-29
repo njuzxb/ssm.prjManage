@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>5.1.3.RELEASE</version>
+			<version>5.1.14.RELEASE</version>
 		</dependency>
 		<!-- 返回Json字符串的支持 -->
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
